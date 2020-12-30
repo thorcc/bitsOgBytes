@@ -15,6 +15,10 @@
 		}
 		bits = [...bits];
 	}
+	$: {
+		if(visFaktorer)
+			visLys = false;
+	}
 
 	let visLys = true;
 	let visBits = true;
