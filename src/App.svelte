@@ -3,12 +3,10 @@
 	let desimal = 0;
 	let bits;
 	let ascii;
-	$: ascii = 
-		desimal > 30 && desimal < 128
-			? String.fromCharCode(desimal)
-			: "N/A";
+	$: ascii =
+		desimal > 30 && desimal < 128 ? String.fromCharCode(desimal) : "N/A";
 	$: bits = desimalTilBinaer(desimal).split("");
-	
+
 	$: {
 		if (bits.length < antBit) {
 			bits.unshift("0");
@@ -53,7 +51,7 @@
 </script>
 
 <style>
-	h1{
+	h1 {
 		text-align: center;
 	}
 	.antBits {
@@ -82,20 +80,20 @@
 		flex-direction: column;
 		justify-content: center;
 	}
-	.bit{
+	.bit {
 		display: flex;
 		flex-direction: row;
 		justify-content: flex-start;
 		gap: 10px;
 	}
-	.bitOptions{
+	.bitOptions {
 		display: flex;
 		flex-direction: column;
 	}
-	.bitOptions img{
+	.bitOptions img {
 		cursor: pointer;
 	}
-	.bitOptions img:hover{
+	.bitOptions img:hover {
 		transform: scale(0.9);
 	}
 	.info p,
@@ -107,7 +105,7 @@
 		width: 132px;
 		margin: auto;
 	}
-	.bitramme{
+	.bitramme {
 		cursor: pointer;
 	}
 	.bilderamme {
@@ -124,7 +122,7 @@
 	img {
 		width: 200px;
 	}
-	.icon{
+	.icon {
 		width: 24px;
 	}
 	.paa {
@@ -133,13 +131,13 @@
 	.av {
 		margin-left: -100px;
 	}
-	.lysPaa{
+	.lysPaa {
 		margin-left: -107.85px;
 	}
-	.lysAv{
+	.lysAv {
 		margin-left: 0;
 	}
-	.lysRamme{
+	.lysRamme {
 		width: 107.85px;
 		overflow: hidden;
 	}
@@ -147,13 +145,21 @@
 		width: 100px;
 		margin: 0px;
 	}
+	.valgramme {
+		position: relative;
+	}
 	.options {
 		position: absolute;
-		bottom: 10px;
+		top: 0;
 		left: 10px;
 		width: max-content;
 		border: solid 0.1px rgba(0, 0, 0, 0.4);
 		padding: 5px;
+	}
+	@media(max-width: 700px){
+		.options{
+			position: relative;
+		}
 	}
 </style>
 
@@ -162,13 +168,21 @@
 	<div class="inforamme">
 		<div class="info antBits bit {visBits ? '' : 'usynlig'}">
 			<div>
-				<p>{antBit === 1 ? "Bit" : "Bits"}</p>
+				<p>{antBit === 1 ? 'Bit' : 'Bits'}</p>
 				<h3>{antBit}</h3>
 			</div>
 			<div class="bitOptions">
-				<img on:click={() => antBit += 1} class="icon" src="add.png" alt="">
-				<img on:click={() => antBit -= 1} class="icon" src="minus.png" alt="">
-			</div>	
+				<img
+					on:click={() => (antBit += 1)}
+					class="icon"
+					src="add.png"
+					alt="" />
+				<img
+					on:click={() => (antBit -= 1)}
+					class="icon"
+					src="minus.png"
+					alt="" />
+			</div>
 		</div>
 		<div class="info antBits {visBytes ? '' : 'usynlig'}">
 			<p>Bytes</p>
@@ -187,58 +201,61 @@
 						alt="bryter" />
 				</div>
 				{#if visFaktorer}
-					<h2>{bit} * {2**(antBit - i - 1)}</h2>
+					<h2>{bit} * {2 ** (antBit - i - 1)}</h2>
+				{:else if visLys}
+					<div class="lysRamme">
+						<img
+							class={bit === '1' ? 'lysPaa' : 'lysAv'}
+							src="lys.svg"
+							alt={bit} />
+					</div>
 				{:else}
-					{#if visLys}
-						<div class="lysRamme">
-							<img class="{bit === "1" ? "lysPaa" : "lysAv"}" src="lys.svg" alt={bit}>
-						</div>
-					{:else}
-						<h2>{bit}</h2>
-					{/if}
+					<h2>{bit}</h2>
 				{/if}
 			</div>
 		{/each}
 	</div>
-	<div class="inforamme">
-		<div class="info {visDesimal ? '' : 'usynlig'}">
-			<p>Desimaltall</p>
-			<h3><input type="number" bind:value={desimal} min="0" /></h3>
+	<div class="valgramme">
+		<div class="inforamme">
+			<div class="info {visDesimal ? '' : 'usynlig'}">
+				<p>Desimaltall</p>
+				<h3><input type="number" bind:value={desimal} min="0" /></h3>
+			</div>
+			<div class="info {visAscii ? '' : 'usynlig'}">
+				<p>ASCII</p>
+				<h4>{ascii}</h4>
+			</div>
 		</div>
-		<div class="info {visAscii ? '' : 'usynlig'}">
-			<p>ASCII</p>
-			<h4>{ascii}</h4>
-		</div>
-	</div>
-	<div class="options">
-		<h3>Valg</h3>
-		<div class="valg">
-			<label>
-				<input type="radio" bind:group={visLys} value={true} />
-				<span>Lys</span>
-				<input type="radio" bind:group={visLys} value={false} />
-				<span>Tall</span>
-			</label>
-			<label>
-				<input type="checkbox" bind:checked={visBits} />
-				<span>bits</span>
-			</label>
-			<label>
-				<input type="checkbox" bind:checked={visBytes} />
-				<span>bytes (1 byte = 8 bits)</span>
-			</label>
-			<label>
-				<input type="checkbox" bind:checked={visDesimal} />
-				<span>desimal</span>
-			</label>
-			<label>
-				<input type="checkbox" bind:checked={visFaktorer} />
-				<span>faktorer</span>
-			</label>
-			<label>
-				<input type="checkbox" bind:checked={visAscii} />
-				<span>ASCII</span>
-			</label>
+		<div class="options">
+			<h3>Valg</h3>
+			<div class="valg">
+				<label>
+					<input type="radio" bind:group={visLys} value={true} />
+					<span>Lys</span>
+					<input type="radio" bind:group={visLys} value={false} />
+					<span>Tall</span>
+				</label>
+				<label>
+					<input type="checkbox" bind:checked={visBits} />
+					<span>bits</span>
+				</label>
+				<label>
+					<input type="checkbox" bind:checked={visBytes} />
+					<span>bytes (1 byte = 8 bits)</span>
+				</label>
+				<label>
+					<input type="checkbox" bind:checked={visDesimal} />
+					<span>desimal</span>
+				</label>
+				<label>
+					<input type="checkbox" bind:checked={visFaktorer} />
+					<span>faktorer</span>
+				</label>
+				<label>
+					<input type="checkbox" bind:checked={visAscii} />
+					<span>ASCII</span>
+				</label>
+			</div>
 		</div>
 	</div>
 </main>
