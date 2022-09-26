@@ -222,7 +222,7 @@
 	<div class="valgramme">
 		<div class="inforamme">
 			<div class="info {visDesimal ? '' : 'usynlig'}">
-				<p>Desimaltall</p>
+				<p>Titallsystemet</p>
 				<h3><input type="number" bind:value={desimal} min="0" /></h3>
 			</div>
 			<div class="info {visAscii ? '' : 'usynlig'}">
@@ -249,7 +249,7 @@
 				</label>
 				<label>
 					<input type="checkbox" bind:checked={visDesimal} />
-					<span>desimal</span>
+					<span>titallsystemet</span>
 				</label>
 				<label>
 					<input type="checkbox" bind:checked={visFaktorer} />
